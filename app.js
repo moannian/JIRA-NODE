@@ -11,7 +11,10 @@ const fs = require("fs")
 // 设置路由
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-let loginRouter = require("./routes/login")
+let loginRouter = require("./routes/login");
+let projectList = require("./routes/projectList");
+let principalList = require("./routes/principalList")
+
 var app = express();
 
 let logfileName = path.join(__dirname, "logs", "index.log");
@@ -30,18 +33,21 @@ const SessionStore = new redisConnect({
     client: redisClient
 })
 app.use(session({
-        secret: "LIHUU_1212",
-        cookie: {
-            path: "/",
-            httpOnly: true,
-            maxAge: 800000
-        },
-        store: SessionStore //储存redis
-    }))
-    // 注册路由
+    secret: "LIHUU_1212",
+    cookie: {
+        path: "/",
+        httpOnly: true,
+        maxAge: 800000
+    },
+    store: SessionStore //储存redis
+}))
+
+// 注册路由
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
+app.use('/projectlist', projectList);
+app.use('/principallist', principalList);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
